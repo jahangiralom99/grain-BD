@@ -3,7 +3,7 @@ import { TiArrowShuffle } from "react-icons/ti";
 
 const Navbar1 = () => {
   return (
-    <div className="max-w-screen-xl mx-auto px-4  border-b-2 hidden lg:block">
+    <div className="max-w-screen-xl mx-auto px-4 border-b-2 hidden lg:block">
       <div className="flex justify-end  p-3  ">
         <div className="flex gap-3 items-center">
           <div className="relative">
@@ -13,7 +13,7 @@ const Navbar1 = () => {
               name="id-s03"
               placeholder="Search here"
               aria-label="Search content"
-              className="peer relative h-10 w-full rounded-full border border-slate-200 px-4 pr-12 text-sm text-slate-500 outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-[#4f3326] focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+              className="relative h-10 w-full rounded-full border border-slate-200 px-4 "
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"

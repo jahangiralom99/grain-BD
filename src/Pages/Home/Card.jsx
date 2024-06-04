@@ -1,4 +1,4 @@
-import { BiCart } from "react-icons/bi";
+
 import { CiSearch, CiStar } from "react-icons/ci";
 import { TiArrowShuffle } from "react-icons/ti";
 
@@ -88,7 +88,7 @@ const Card = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 mt-16">
-      <div className="grid lg:grid-cols-4 gap-5 justify-items-center grid-cols-1 md:grid-cols-3">
+      <div className="grid gap-5 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
         {data.map((item) => (
           <div className="relative group" key={item.id}>
             <img src={item.image} alt="" />
@@ -112,14 +112,24 @@ const Card = () => {
                 <CiStar />
                 <CiStar />
               </div>
-              <h1 className="text-2xl font-semibold text-[#8d3041] ">
-                {item.price} ৳{" "}
-              </h1>
-              <div className="w-44 mx-auto">
-                <button className="bg-[#dd9221] gap-2 flex items-center justify-center px-6 py-2 rounded text-white ">
-                  <BiCart className="text-2xl" />
-                  ADD TOCART
-                </button>
+
+              <div className="flex flex-row  items-center justify-center gap-4">
+                <div className="flex">
+                  <div className="text-2xl border px-3 py- border-l-2 rounded-l-full font-bold">
+                    -
+                  </div>
+                  <input
+                    className="border w-8 text-center"
+                    type="text"
+                    defaultValue={1}
+                  />
+                  <div className="text-2xl border px-3 py- border-l-2 rounded-r-full font-bold">
+                    +
+                  </div>
+                </div>
+                  <button className="bg-[#dd9221] gap-1 px-6 py-2 rounded text-white ">
+                    ADD TOCART
+                  </button>
               </div>
             </div>
           </div>

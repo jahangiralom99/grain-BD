@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
 import { MdOutlineMenu, MdOutlineShoppingBag } from "react-icons/md";
@@ -19,9 +19,32 @@ const Navbar2 = () => {
       <li>ABOUT US</li>
     </>
   );
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset >= 100) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <div className="flex items-center justify-between max-w-screen-xl mx-auto px-4 p-2">
+    <div
+      className={`flex ${
+        isSticky
+          ? "fixed top-0  z-10  px-3 md:px-6 lg:px-12 xl:px-14  w-full "
+          : ""
+      } w-full bg-white z-40 items-center justify-between mx-auto px-4 p-1`}
+    >
       <div onClick={() => setOpen(!open)} className="lg:hidden">
         <div className="flex items-center cursor-pointer">
           <MdOutlineMenu className="text-3xl" />
@@ -72,7 +95,7 @@ const Navbar2 = () => {
         <div className="relative">
           <MdOutlineShoppingBag className="text-2xl" />
           <div className="absolute bg-[#823400] rounded-full p-1 h-5 flex items-center justify-center -top-2 left-3">
-            <p className=" ">0</p>
+            <p className="text-white">0</p>
           </div>
         </div>
       </div>
