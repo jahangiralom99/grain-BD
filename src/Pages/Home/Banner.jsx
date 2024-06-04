@@ -64,7 +64,7 @@ const Banner = () => {
           </div>
           {/*    <!-- Indicators --> */}
           <div
-            className="absolute bottom-10 flex items-center justify-center w-full gap-2"
+            className="absolute bottom-4 lg:bottom-10 flex items-center justify-center w-full gap-2"
             data-glide-el="controls[nav]"
           >
              <button
