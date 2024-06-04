@@ -93,14 +93,12 @@ const Card = () => {
           <div className="relative group" key={item.id}>
             <img src={item.image} alt="" />
             <div className="bg-white hidden group-hover:block rounded absolute top-3 right-3 p-2">
-              <div>
-                <TiArrowShuffle className="text-2xl " />
-              </div>
+              <TiArrowShuffle className="text-2xl " />
               <div className="mt-3">
                 <CiSearch className="text-2xl" />
               </div>
             </div>
-            <div className="text-center space-y-3">
+            <div className="text-center space-y-3 mt-3">
               <h3 className="font-bold ">{item.name}</h3>
               <p className="text-gray-400">DAIRY</p>
               <p className="font-bold">

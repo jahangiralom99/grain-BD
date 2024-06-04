@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
-import { MdOutlineMenu } from "react-icons/md";
+import { MdOutlineMenu, MdOutlineShoppingBag } from "react-icons/md";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
@@ -60,11 +60,20 @@ const Navbar2 = () => {
           </ul>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-       
-        <LuShoppingCart className="text-2xl" /> |
-        <div className="flex font-bold">
-          0 <TbCurrencyTaka className="text-2xl" />
+      <div className="hidden lg:block">
+        <div className="flex items-center gap-2">
+          <LuShoppingCart className="text-2xl" /> |
+          <div className="flex font-bold">
+            0 <TbCurrencyTaka className="text-2xl" />
+          </div>
+        </div>
+      </div>
+      <div className="lg:hidden">
+        <div className="relative">
+          <MdOutlineShoppingBag className="text-2xl" />
+          <div className="absolute bg-[#823400] rounded-full p-1 h-5 flex items-center justify-center -top-2 left-3">
+            <p className=" ">0</p>
+          </div>
         </div>
       </div>
     </div>
