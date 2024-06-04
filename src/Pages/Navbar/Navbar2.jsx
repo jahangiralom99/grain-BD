@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
 import { MdOutlineMenu, MdOutlineShoppingBag } from "react-icons/md";
@@ -66,7 +67,23 @@ const Navbar2 = () => {
             <IoMdClose className="text-2xl" />
           </h1>
         </div>
-        <ul className="p-4 flex flex-col gap-3">{links}</ul>
+        <ul className="p-4 flex flex-col gap-3">
+          <div className=" relative  mt-3">
+            <div className=" py-3">
+              <input
+                className="w-full border-b-2 outline-none font-semibold rounded mx-auto py-1 px-1"
+                type="text"
+                name=""
+                id=""
+                placeholder="Search for products"
+              />
+            </div>
+            <div className="absolute top-5 right-5">
+              <CiSearch className="text-2xl " />
+            </div>
+          </div>
+          {links}
+        </ul>
       </div>
 
       <div className="flex items-center gap-4">
