@@ -42,7 +42,7 @@ const Navbar2 = () => {
     <div
       className={`flex ${
         isSticky
-          ? "fixed top-0  z-10  px-3 md:px-6 lg:px-12 xl:px-14  w-full "
+          ? "fixed top-0  z-10  px-3 md:px-6 lg:px-12 xl:px-14 shadow-2xl  w-full "
           : ""
       } w-full bg-white z-40 items-center justify-between mx-auto px-4 p-1`}
     >
@@ -95,16 +95,16 @@ const Navbar2 = () => {
           />
         </Link>
         <div className="hidden lg:block">
-          <ul className="flex gap-4 relative group cursor-pointer flex-wrap text-[12px] font-semibold">
+          <ul className="flex gap-4 relative group cursor-pointer flex-wrap text-[16px] font-semibold">
             {links}
           </ul>
         </div>
       </div>
       <div className="hidden lg:block">
         <div className="flex items-center gap-2">
-          <LuShoppingCart className="text-2xl" /> |
-          <div className="flex font-bold">
-            0 <TbCurrencyTaka className="text-2xl" />
+          <LuShoppingCart className="text-3xl text-gray-500" /> |
+          <div className="flex items-center text-2xl font-bold">
+            0 <TbCurrencyTaka className="text-3xl text-gray-500" />
           </div>
         </div>
       </div>

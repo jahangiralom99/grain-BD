@@ -20,7 +20,7 @@ const Gallery = () => {
       <div className="flex flex-wrap items-center justify-center mt-8">
         {data.map((item) => (
           <div className="border" key={item.id}>
-            <img className="w-full" src={item.image} alt="image" />
+            <img className="w-full rounded" src={item.image} alt="image" />
           </div>
         ))}
       </div>

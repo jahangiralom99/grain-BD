@@ -29,9 +29,14 @@ const Footer = () => {
               </p>
               
             </div>
-            <div className="md:w-[316px] text-white">
+            <div className="md:w-[316px] space-y-6 text-white">
                 <h1 className="text-2xl font-semibold mb-3">Our Outlets</h1>
-                <p>Outlet/Sector - 6</p>
+              <p>Outlet/Sector - 6</p>
+              <p>House - 04, Road - 12, Sector - 6, Uttara, Dhaka Phone: 01844-527472</p>
+              <p>Outlet/Sector - 9</p>
+              <p>House - 04, Road - 1/A , Sector - 09, Uttara, Dhaka Phone: 01844527471</p>
+              <p>Outlet/Sector - 11</p>
+              <p>House - 1, Road - 15, Sector - 11, Uttara, Dhaka Phone: 01844-527473</p>
             </div>
             <div className="mt-6 flex w-full flex-col justify-between text-white sm:flex-row md:mt-0 md:max-w-[341px]">
               <div className="">
