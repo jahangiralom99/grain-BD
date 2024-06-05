@@ -6,7 +6,7 @@ const OpenClose = () => {
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-center p-8 gap-5">
         <div className="flex-1">
           <img
-            className="h-[433px]"
+            className="w-full rounded"
             src="https://i.ibb.co/zmXXJzd/Web-Banner-1.jpg"
             alt=""
           />

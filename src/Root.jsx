@@ -3,6 +3,7 @@ import Navbar2 from "./Pages/Navbar/Navbar2";
 import Navbar1 from "./Pages/Navbar/Navbar1";
 import Navbar3 from "./Pages/Navbar/Navbar3";
 import Search from "./Pages/Navbar/Search";
+import Footer from "./Pages/Footer/Footer";
 
 const Root = () => {
   return (
@@ -12,7 +13,7 @@ const Root = () => {
       <Navbar3 />
       <Search/>
       <Outlet />
-      footer
+      <Footer/>
     </div>
   );
 };
