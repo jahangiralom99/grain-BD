@@ -102,7 +102,10 @@ const Navbar2 = () => {
       </div>
       <div className="hidden lg:block">
         <div className="flex items-center gap-2">
-          <LuShoppingCart className="text-3xl text-gray-500" /> |
+
+          <Link to='/cart'>
+          <LuShoppingCart className="text-3xl text-gray-500" />
+          </Link> |
           <div className="flex items-center text-2xl font-bold">
             0 <TbCurrencyTaka className="text-3xl text-gray-500" />
           </div>

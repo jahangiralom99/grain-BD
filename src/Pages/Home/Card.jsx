@@ -1,6 +1,7 @@
 
 import { CiSearch, CiStar } from "react-icons/ci";
 import { TiArrowShuffle } from "react-icons/ti";
+import { Link } from "react-router-dom";
 
 const Card = () => {
   const data = [
@@ -91,6 +92,9 @@ const Card = () => {
       <div className="grid gap-5 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
         {data.map((item) => (
           <div className="relative group" key={item.id}>
+
+
+            <Link to='/product'>
             <img src={item.image} alt="" />
             <div className="bg-white hidden group-hover:block rounded absolute top-3 right-3 p-2">
               <TiArrowShuffle className="text-2xl " />
@@ -98,13 +102,16 @@ const Card = () => {
                 <CiSearch className="text-2xl" />
               </div>
             </div>
+            </Link>
             <div className="text-center space-y-3 mt-3">
+              <Link to='/product'>
               <h3 className="font-bold ">{item.name}</h3>
               <p className="text-gray-400">DAIRY</p>
               <p className="font-bold">
                 SKU:{" "}
                 <span className="font-normal text-gray-400">{item.SKU}</span>
               </p>
+              </Link>
               <div className="flex items-center justify-center">
                 <CiStar />
                 <CiStar />
