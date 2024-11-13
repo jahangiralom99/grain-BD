@@ -1,16 +1,40 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
 import { MdOutlineMenu, MdOutlineShoppingBag } from "react-icons/md";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { CartContext } from "../../Root";
+import { getStrdCart } from "../../utilities/functions";
 
 const Navbar2 = () => {
   const [open, setOpen] = useState(false);
+  const sidebarRef = useRef(null);
+
+  // Close sidebar if click is outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open, setOpen]);
+
+  const { cartItems } = useContext(CartContext);
+  const { data } = getStrdCart("grain-login");
+
   const links = (
     <>
-      <li>HOME</li>
+      <Link to="/">HOME</Link>
       <li>MENU</li>
       <li>CAKE REQUEST</li>
       <li>ADDONS</li>
@@ -53,11 +77,10 @@ const Navbar2 = () => {
         </div>
       </div>
       <div
-        className={`h-[100vh] fixed  bg-white z-50  ${
-          open
-            ? "left-0 top-0 h-screen w-56 transition duration-700"
-            : "-left-80"
-        }`}
+        ref={sidebarRef}
+        className={`fixed top-0 left-0 h-full bg-white z-50 transition-transform duration-500 ease-in-out transform ${
+          open ? "translate-x-0" : "-translate-x-full"
+        } w-56`}
       >
         <div
           className="absolute right-0 top-0 cursor-pointer"
@@ -82,7 +105,8 @@ const Navbar2 = () => {
               <CiSearch className="text-2xl " />
             </div>
           </div>
-          {links}
+
+          <li onClick={() => setOpen(false)}>{links}</li>
         </ul>
       </div>
 
@@ -100,25 +124,30 @@ const Navbar2 = () => {
           </ul>
         </div>
       </div>
-      <div className="hidden lg:block">
-        <div className="flex items-center gap-2">
-
-          <Link to='/cart'>
-          <LuShoppingCart className="text-3xl text-gray-500" />
-          </Link> |
-          <div className="flex items-center text-2xl font-bold">
-            0 <TbCurrencyTaka className="text-3xl text-gray-500" />
+      {data?.full_name ? (
+        <>
+          <div className={"hidden lg:block"}>
+            <div className="flex items-center gap-2">
+              <Link to="/cart">
+                <LuShoppingCart className="text-3xl text-gray-500" />
+              </Link>{" "}
+              |
+              <div className="flex items-center text-2xl font-bold">
+                {cartItems}{" "}
+                <TbCurrencyTaka className="text-3xl text-gray-500" />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="lg:hidden">
-        <div className="relative">
-          <MdOutlineShoppingBag className="text-2xl" />
-          <div className="absolute bg-[#823400] rounded-full p-1 h-5 flex items-center justify-center -top-2 left-3">
-            <p className="text-white">0</p>
+          <div className="lg:hidden">
+            <Link to="/cart" className="relative">
+              <MdOutlineShoppingBag className="text-2xl" />
+              <div className="absolute bg-[#823400] rounded-full p-1 h-5 flex items-center justify-center -top-2 left-3">
+                <p className="text-white">{cartItems}</p>
+              </div>
+            </Link>
           </div>
-        </div>
-      </div>
+        </>
+      ) : null}
     </div>
   );
 };

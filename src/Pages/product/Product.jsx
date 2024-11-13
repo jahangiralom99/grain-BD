@@ -1,5 +1,6 @@
 // import ReactImageMagnify from "react-image-magnify";
 // import { Helmet } from "react-helmet";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { BsCashCoin } from "react-icons/bs";
 import { CiHeart, CiShare2 } from "react-icons/ci";
@@ -12,9 +13,32 @@ import { TiStarFullOutline } from "react-icons/ti";
 import ReactImageMagnify from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { ItemContext } from "../../Root";
+import { getStrdCart } from "../../utilities/functions";
+import { base_url } from "../../utilities/dataPanel";
 
 const Product = () => {
+  const [loader, setLoader] = useState(true);
+  const { name } = useParams();
+  const itemData = useContext(ItemContext);
+  const [disable, setDisable] = useState();
+  const { data } = getStrdCart("grain-login");
+  const [count, setCount] = useState(1);
+  const [landing, setLanding] = useState({});
+
+  useEffect(() => {
+    let itmFind = itemData?.data?.find((item) => item.name === name);
+    let disable = itmFind?.custom_is_landing == 0 ? true : false;
+
+    // setaLandingPath(path);
+    setLanding(itmFind);
+    setDisable(disable);
+    setLoader(false);
+  }, [name, itemData]);
+
+  // console.log(name);
+
   const images = [
     {
       id: 1,
@@ -45,13 +69,14 @@ const Product = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 mt-5  p-2">
-              <Helmet>
-                <meta charSet="utf-8" />
-                <title> Product | Grain Pastry & Bakery</title>
-                <link rel="canonical" href="http://static.ajkerdeal.com/images/dealdetails/ad-logo.svg" />
-            </Helmet>
-
-
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title> Product | Grain Pastry & Bakery</title>
+        <link
+          rel="canonical"
+          href="http://static.ajkerdeal.com/images/dealdetails/ad-logo.svg"
+        />
+      </Helmet>
 
       <div className="bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-5 place-items-center place-content-center	">
         <Carousel className="z-10">
@@ -60,9 +85,9 @@ const Product = () => {
               <ReactImageMagnify
                 {...{
                   smallImage: {
-                    alt: "Images",
+                    alt: `${landing?.image}`,
                     isFluidWidth: true,
-                    src: item.image,
+                    src: `${base_url + landing?.image}`,
                     height: 562,
                     width: 140,
                   },
@@ -80,10 +105,7 @@ const Product = () => {
           ))}
         </Carousel>
         <div className="p-4">
-          <h1 className="text-xl font-semibold">
-            Real Madrid Home Jersey - Premium - 23/24 Season - Official Real
-            Madrid Home Jersey For Dedicated Fans
-          </h1>
+          <h1 className="text-xl font-semibold">{landing?.item_name}</h1>
           <div className="mt-5 flex items-center justify-between">
             <div className="flex items-center ">
               <TiStarFullOutline className="text-[14px] text-[#faca51]" />
@@ -152,23 +174,60 @@ const Product = () => {
           <div className="flex gap-12 mt-8">
             <h1 className="text-[#757575]">Quantity</h1>
             <div className="flex items-center cursor-pointer">
-              <p className="border px-3 font-bold bg-[#fafafa]">-</p>
-              <input className="w-6 px-2" type="text" defaultValue={1} />
-              <p className="border px-3 font-bold bg-[#fafafa]">+</p>
+              <button
+                onClick={() => setCount(count - 1)}
+                disabled={count > 0 ? false : true}
+                className={`border text-center w-8 font-bold ${
+                  count > 0
+                    ? " text-red-600 border-red-600"
+                    : " cursor-not-allowed bg-[#fafafa]"
+                }`}
+              >
+                -
+              </button>
+              <input
+                className="w-12 focus:border-none outline-none text-center px-2 border bg-[#f36f21] text-white"
+                type="text"
+                value={count}
+                readOnly
+              />
+              <button
+                onClick={() => setCount(count + 1)}
+                className="border text-[#f36f21] border-[#f36f21] text-center w-8 font-bold bg-[#fafafa]"
+              >
+                +
+              </button>
             </div>
           </div>
-          <div className="mt-4 flex gap-3 items-center ">
-            <div className="flex-1">
-              <Link to='/landing'>
-              <button className="bg-[#2abbe8] hover:bg-[#0881a6] w-full py-2 font-semibold text-white rounded">
-                Quick Order
-              </button>
-              </Link>
-            </div>
-            <div className="flex-1">
-              <div className="bg-[#f57224] hover:bg-[#7e3003] w-full py-2 lg:px-10 md:px-5 px-3 font-semibold text-white rounded">
-                Add To Cart
-              </div>
+          <div className="mt-4 flex gap-3 items-center w-full justify-center">
+            <button className="bg-[#2abbe8] whitespace-nowrap hover:bg-[#0881a6] py-2 font-semibold text-white rounded w-full">
+              Quick Order
+            </button>
+            <div className="w-full">
+              {data?.user_id ? (
+                <button
+                  // onClick={() => handleAddCart()}
+                  disabled={count > 0 ? false : true}
+                  className={`w-full whitespace-nowrap py-2  px-12  font-semibold text-white rounded ${
+                    count > 0
+                      ? "bg-[#f57224] hover:bg-[#7e3003]"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  Add To Cart
+                </button>
+              ) : (
+                <Link
+                  to={`/login`}
+                  className={` whitespace-nowrap py-2 lg:px-10 md:px-5 px-12 font-semibold text-white rounded ${
+                    count > 0
+                      ? "bg-[#f57224] hover:bg-[#7e3003] w-full"
+                      : "bg-gray-400 cursor-not-allowed w-full"
+                  }`}
+                >
+                  Add To Cart
+                </Link>
+              )}
             </div>
           </div>
         </div>

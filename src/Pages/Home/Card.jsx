@@ -1,146 +1,137 @@
-
+/* eslint-disable react/prop-types */
 import { CiSearch, CiStar } from "react-icons/ci";
 import { TiArrowShuffle } from "react-icons/ti";
 import { Link } from "react-router-dom";
+import { base_url } from "../../utilities/dataPanel";
+import { useContext, useState } from "react";
+import { addToCart } from "../../utilities/functions";
+import { toast } from "react-toastify";
+import { CartContext } from "../../Root";
 
-const Card = () => {
-  const data = [
-    {
-      id: 1,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Whole Milk",
-      SKU: "MILK1234",
-      DAIRY: "Yes",
-      price: 3.49,
-    },
-    {
-      id: 2,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Cheddar Cheese",
-      SKU: "CHEESE5678",
-      DAIRY: "Yes",
-      price: 4.99,
-    },
-    {
-      id: 3,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Greek Yogurt",
-      SKU: "YOGURT9101",
-      DAIRY: "Yes",
-      price: 1.99,
-    },
-    {
-      id: 4,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Butter",
-      SKU: "BUTTER1121",
-      DAIRY: "Yes",
-      price: 2.99,
-    },
-    {
-      id: 5,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Almond Milk",
-      SKU: "ALMOND1324",
-      DAIRY: "No",
-      price: 3.79,
-    },
-    {
-      id: 6,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Oat Milk",
-      SKU: "OATMILK5678",
-      DAIRY: "No",
-      price: 3.99,
-    },
-    {
-      id: 7,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Swiss Cheese",
-      SKU: "CHEESE9021",
-      DAIRY: "Yes",
-      price: 5.49,
-    },
-    {
-      id: 8,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Cottage Cheese",
-      SKU: "CHEESE3456",
-      DAIRY: "Yes",
-      price: 2.49,
-    },
-    {
-      id: 9,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Soy Milk",
-      SKU: "SOYMILK7890",
-      DAIRY: "No",
-      price: 3.29,
-    },
-    {
-      id: 10,
-      image: "https://i.ibb.co/HH7Lmxh/Cake-Items-Product-Design-1-430x304.jpg",
-      name: "Cream Cheese",
-      SKU: "CHEESE1112",
-      DAIRY: "Yes",
-      price: 2.79,
-    },
-  ];
+const Card = ({ activeGroupId, itemData }) => {
+  // const [count, setCount] = useState(1);
+  const [counts, setCounts] = useState({});
+  const { cartItems, setCartItems } = useContext(CartContext);
+
+  // console.log(webItmData);
+
+  // console.log(counts);
+
+  // handle add TO card
+  const handleAddToCart = (item) => {
+    // console.log(item);
+
+    const newItem = {
+      image: item?.image,
+      item_name: item?.item_name,
+      item_code: item?.item_code,
+      standard_rate: item?.standard_rate,
+      qty: counts[item?.item_name] || 1,
+      uom: item?.stock_uom,
+    };
+
+    // console.log(newItem);
+    addToCart(newItem);
+
+    // re set the value
+    setCounts((prevCounts) => ({ ...prevCounts, [item.item_name]: 1 }));
+
+    // let cart = getStrdCart("cart");
+    toast("Cart Added");
+    setCartItems(cartItems + 1);
+    // putCartDB(userData[0]?.name, cart).then((result) => {
+    //   if (result) {
+    //
+    //   }
+    // });
+  };
+
+  const handleSetCount = (id, newCount) => {
+    setCounts((prevCounts) => ({ ...prevCounts, [id]: newCount }));
+  };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4 mt-16">
-      <div className="grid gap-5 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
-        {data.map((item) => (
-          <div className="relative group" key={item.id}>
-
-
-            <Link to='/product'>
-            <img src={item.image} alt="" />
-            <div className="bg-white hidden group-hover:block rounded absolute top-3 right-3 p-2">
-              <TiArrowShuffle className="text-2xl " />
-              <div className="mt-3">
-                <CiSearch className="text-2xl" />
-              </div>
-            </div>
-            </Link>
-            <div className="text-center space-y-3 mt-3">
-              <Link to='/product'>
-              <h3 className="font-bold ">{item.name}</h3>
-              <p className="text-gray-400">DAIRY</p>
-              <p className="font-bold">
-                SKU:{" "}
-                <span className="font-normal text-gray-400">{item.SKU}</span>
-              </p>
-              </Link>
-              <div className="flex items-center justify-center">
-                <CiStar />
-                <CiStar />
-                <CiStar />
-                <CiStar />
-                <CiStar />
-              </div>
-
-              <div className="flex flex-row  items-center justify-center gap-4">
-                <div className="flex">
-                  <div className="text-2xl border px-3 py- border-l-2 rounded-l-full font-bold">
-                    -
-                  </div>
-                  <input
-                    className="border w-8 text-center"
-                    type="text"
-                    defaultValue={1}
-                  />
-                  <div className="text-2xl border px-3 py- border-l-2 rounded-r-full font-bold">
-                    +
+    <div className="max-w-screen-xl mx-auto px-4 mt-12">
+      <div className="grid gap-5 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
+        {itemData?.data
+          ?.filter((item) => item?.item_group === activeGroupId)
+          .map((item) => (
+            <div className="relative group " key={item.id}>
+              <Link to={`/product/${item?.name}`}>
+                <img
+                  className="w-44 h-32 object-contain mx-auto"
+                  src={`${base_url + item?.image}`}
+                  alt=""
+                />
+                <div className="bg-white hidden group-hover:block rounded absolute top-3 right-3 p-2">
+                  <TiArrowShuffle className="text-2xl " />
+                  <div className="mt-3">
+                    <CiSearch className="text-2xl" />
                   </div>
                 </div>
-                  <button className="bg-[#dd9221] gap-1 px-6 py-2 rounded text-white ">
+              </Link>
+              <div className="text-center space-y-3 mt-3">
+                <Link to="/product">
+                  <h3 className="font-bold ">{item.item_name}</h3>
+                  <p className="text-gray-400">DAIRY</p>
+                  <p className="font-bold">
+                    SKU:{" "}
+                    <span className="font-normal text-gray-400">
+                      {item.SKU}
+                    </span>
+                  </p>
+                </Link>
+                <div className="flex items-center justify-center">
+                  <CiStar />
+                  <CiStar />
+                  <CiStar />
+                  <CiStar />
+                  <CiStar />
+                </div>
+
+                <div className="flex flex-row  items-center justify-center gap-4">
+                  <div className="flex">
+                    <div
+                      onClick={() =>
+                        handleSetCount(
+                          item.item_name,
+                          Math.max((counts[item.item_name] || 1) - 1, 1)
+                        )
+                      }
+                      className="text-2xl border px-3 py- border-l-2 rounded-l-full font-bold cursor-pointer"
+                    >
+                      -
+                    </div>
+                    <input
+                      className="border w-8 text-center"
+                      type="text"
+                      onChange={(e) =>
+                        handleSetCount(item.item_name, parseInt(e.target.value))
+                      }
+                      value={counts[item.item_name] || 1}
+                    />
+                    <div
+                      onClick={() =>
+                        handleSetCount(
+                          item.item_name,
+                          (counts[item.item_name] || 1) + 1
+                        )
+                      }
+                      className="text-2xl border px-3 py- border-l-2 rounded-r-full font-bold cursor-pointer"
+                    >
+                      +
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleAddToCart(item)}
+                    className="bg-[#dd9221] gap-1 px-6 py-1 rounded text-white whitespace-nowrap"
+                  >
                     ADD TOCART
                   </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

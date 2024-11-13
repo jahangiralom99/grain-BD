@@ -1,73 +1,52 @@
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Card from "./Card";
+import { base_url } from "../../utilities/dataPanel";
 
-const Category = () => {
-  const data = [
-    {
-      id: 1,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "CAKE",
-    },
-    {
-      id: 2,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "DESSERT",
-    },
-    {
-      id: 3,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "PASTRY",
-    },
-    {
-      id: 4,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "SAVORIES",
-    },
-    {
-      id: 5,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "POUND CAKE",
-    },
-    {
-      id: 6,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "BREAD & BUN",
-    },
-    {
-      id: 7,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "BISCUITS",
-    },
-    {
-      id: 8,
-      image: "https://i.ibb.co/Cbcj7F4/Web-Icon-2-1-85x85.jpg",
-      name: "CUSTOMIZED CAKE",
-    },
-  ];
+const Category = (props) => {
+  const { grpData, webItmData, itemData } = props;
+  const [activeGroupId, setActiveGroupId] = useState("Baby Care");
+
+  console.log(itemData);
 
   return (
-    <div className="mt-12 max-w-screen-2xl mx-auto px-4 lg:px-8">
+    <div className="mt-12 max-w-screen-xl 2xl:max-w-screen-2xl mx-auto px-4 lg:px-8">
+      <section className=" flex justify-between items-center">
+        <span className="md:block hidden"></span>
+        <span className="text-center font-bold text-2xl">OUR CATEGORIES</span>
 
-<section className=" flex justify-between items-center">
+        <Link to="/allCategory">
+          <span className=" md:text-xl font-semibold flex justify-center items-center">
+            All <FaChevronRight />{" "}
+          </span>
+        </Link>
+      </section>
 
-<span className="md:block hidden"></span >
-<span className="text-center font-bold text-2xl">OUR CATEGORIES</span>
-
-<Link to='/allCategory'>
-<span className=" md:text-xl font-semibold flex justify-center items-center">All <FaChevronRight/> </span>
-</Link>
-</section>
-
-
-
-      <div className="flex gap-6 items-center justify-center overflow-x-auto mt-8 ">
-        {data.map((item) => (
-          <div className="flex flex-col items-center " key={item.id}>
-            <img className="bg-white min-w-20" src={item.image} alt="" />
-            <p className="font-bold text-sm">{item.name}</p>
-          </div>
-        ))}
+      <div className="flex gap-6 items-center justify-start  overflow-x-scroll md:overflow-x-hidden mt-8 pl-4 ">
+        {grpData?.data
+          ?.filter(
+            (filter) => filter.is_group == 0 && filter.show_in_website == 1
+          )
+          .map((item) => (
+            <div
+              onClick={() => setActiveGroupId(item?.name)}
+              className={`flex flex-col items-center ${
+                activeGroupId == item?.name ? "border-b-4 border-[#dd9221]" : ""
+              } p-3 cursor-pointer`}
+              key={item.id}
+            >
+              <img
+                className="w-32 h-24 object-scale-down"
+                src={`${base_url + item.image}`}
+                alt={item?.thumbnail}
+              />
+              <p className="text-sm whitespace-nowrap">{item.name}</p>
+            </div>
+          ))}
       </div>
+      <Card activeGroupId={activeGroupId} webItmData={webItmData} itemData={itemData}></Card>
     </div>
   );
 };
