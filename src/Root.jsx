@@ -29,6 +29,7 @@ const Root = () => {
   }, [cartItems]);
 
 
+// \
 
   return (
     <div>
