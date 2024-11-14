@@ -1,12 +1,64 @@
 import { CiUser } from "react-icons/ci";
 import { MdLogout } from "react-icons/md";
-import { TiArrowShuffle } from "react-icons/ti";
-import { Link } from "react-router-dom";
-import { getStrdCart } from "../../utilities/functions";
+import { Link, useNavigate } from "react-router-dom";
+import { clearStoredCart, getStrdCart } from "../../utilities/functions";
 import { FaUserPlus } from "react-icons/fa";
+import { base_url, fetch_url } from "../../utilities/dataPanel";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import LoaderComponent from "../../components/Shared/LoaderComponent";
 
 const Navbar1 = () => {
   const { data } = getStrdCart("grain-login");
+  const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
+
+  // logout info
+  const handleLogOut = () => {
+    setLoader(true);
+    const postBody = {
+      erp_url: base_url,
+    };
+    // console.log(postBody);
+    fetch(`${fetch_url}/logout`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postBody),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          clearStoredCart("grain-login");
+          clearStoredCart("proceed");
+          //   clearStoredCart("cart");
+          clearStoredCart("item-all-data");
+          //   setCartItems(cartItems + 1);
+          navigate("/login");
+          // window.location.reload();
+          setLoader(false);
+          toast.success("Logout successfully");
+        }
+      })
+      .then((err) => {
+        console.log(err);
+        setLoader(false);
+      })
+      .catch(() => {
+        setLoader(false);
+      });
+  };
+
+  if (loader) {
+    return <LoaderComponent />;
+  }
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 border-b-2 hidden lg:block">
@@ -53,7 +105,7 @@ const Navbar1 = () => {
               </Link>{" "}
               |
               <button
-                // onClick={handleLogOut}
+                onClick={handleLogOut}
                 data-tip="logout"
                 className="lg:tooltip lg:tooltip-bottom"
               >

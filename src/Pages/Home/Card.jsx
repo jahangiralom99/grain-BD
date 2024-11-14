@@ -60,7 +60,7 @@ const Card = ({ activeGroupId, itemData }) => {
             <div className="relative group " key={idx}>
               <Link to={`/product/${item?.name}`}>
                 <img
-                  className="w-44 h-32 object-contain mx-auto"
+                  className="w-44 md:w-72 md:h-52 h-32 object-contain mx-auto"
                   src={`${base_url + item?.image}`}
                   alt={item.item_name}
                 />
