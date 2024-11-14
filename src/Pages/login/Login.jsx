@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { base_url, fetch_url } from "../../utilities/dataPanel";
 import { BiHide, BiShowAlt } from "react-icons/bi";
 import { CiUser } from "react-icons/ci";
+import LoaderComponent from "../../components/Shared/LoaderComponent";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -103,9 +104,9 @@ const Login = () => {
       });
   };
 
-  // if (loading) {
-  //   return <Loader />;
-  // }
+  if (loading) {
+    return <LoaderComponent />;
+  }
 
   return (
     <>

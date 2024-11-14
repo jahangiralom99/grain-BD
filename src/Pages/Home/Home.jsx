@@ -24,7 +24,7 @@ const Home = () => {
       <Category grpData={grpData} webItmData={webItmData} itemData={itemData} />
       {/* <Card /> */}
       <OpenClose />
-      <Card2 />
+      <Card2 grpData={grpData} webItmData={webItmData} itemData={itemData} />
       <Delivery />
       <Gallery />
     </div>

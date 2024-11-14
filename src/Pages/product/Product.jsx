@@ -14,9 +14,10 @@ import ReactImageMagnify from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link, useParams } from "react-router-dom";
-import { ItemContext } from "../../Root";
-import { getStrdCart } from "../../utilities/functions";
+import { CartContext, ItemContext } from "../../Root";
+import { addToCart, getStrdCart } from "../../utilities/functions";
 import { base_url } from "../../utilities/dataPanel";
+import { toast } from "react-toastify";
 
 const Product = () => {
   const [loader, setLoader] = useState(true);
@@ -26,6 +27,8 @@ const Product = () => {
   const { data } = getStrdCart("grain-login");
   const [count, setCount] = useState(1);
   const [landing, setLanding] = useState({});
+  const { cartItems, setCartItems } = useContext(CartContext);
+  const [activeSize, setActiveSize] = useState("M");
 
   useEffect(() => {
     let itmFind = itemData?.data?.find((item) => item.name === name);
@@ -67,6 +70,59 @@ const Product = () => {
     },
   ];
 
+  // handle Add to cart
+  const handleAddCart = () => {
+    const newItem = {
+      image: landing?.image,
+      item_name: landing?.item_name,
+      item_code: landing?.item_code,
+      standard_rate: landing?.standard_rate,
+      qty: count,
+      uom: landing?.stock_uom,
+    };
+
+    // console.log(newItem);
+    addToCart(newItem);
+
+    // let cart = getStrdCart("cart");
+    toast("Cart Added");
+    setCartItems(cartItems + 1);
+    // putCartDB(userData[0]?.name, cart).then((result) => {
+    //   if (result) {
+    //
+    //   }
+    // });
+  };
+
+  // valuation Rate
+  const percentageDifference =
+    landing?.standard_rate != null && landing?.valuation_rate != null
+      ? ((landing.standard_rate - landing.valuation_rate) /
+          landing.standard_rate) *
+        100
+      : null;
+
+  // text to display
+  const formatText = (htmlContent) => {
+    // Create a temporary div to hold the HTML
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent;
+
+    // Replace <p> tags with new lines, then get the text content
+    const textContent = tempDiv.innerText || tempDiv.textContent;
+
+    // Replace <br> tags with new line for proper formatting
+    const formattedText = textContent
+      .replace(/<p>/g, "\n")
+      .replace(/<\/p>/g, "");
+
+    return formattedText;
+  };
+
+  const handleClick = (size) => {
+    setActiveSize(size);
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 mt-5  p-2">
       <Helmet>
@@ -78,7 +134,7 @@ const Product = () => {
         />
       </Helmet>
 
-      <div className="bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-5 place-items-center place-content-center	">
+      <div className="bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-5  place-content-center	">
         <Carousel className="z-10">
           {images.map((item) => (
             <div key={item.id}>
@@ -106,6 +162,7 @@ const Product = () => {
         </Carousel>
         <div className="p-4">
           <h1 className="text-xl font-semibold">{landing?.item_name}</h1>
+          <p className="mt-4 line-clamp-5">{formatText(landing.description)}</p>
           <div className="mt-5 flex items-center justify-between">
             <div className="flex items-center ">
               <TiStarFullOutline className="text-[14px] text-[#faca51]" />
@@ -123,26 +180,32 @@ const Product = () => {
               <CiHeart className="text-2xl" />
             </div>
           </div>
-          <p className="text-[#2918ee] text-[12px] mt-3">
+          {/* <p className="text-[#2918ee] text-[12px] mt-3">
             <span className="font-bold text-[12px] text-[#9e9e9e] ">
               Brand:
             </span>
             <span className="ml-2">No BrandMore Fan Shop from No Brand</span>
-          </p>
+          </p> */}
           <hr className="mt-4" />
           <div className="mt-2 ">
             <div className="flex items-center gap-2 text-[#f57224]">
-              <FaBangladeshiTakaSign className="text-3xl " />{" "}
-              <span className="text-4xl font-semibold">320</span>
+              Price : <FaBangladeshiTakaSign className="text-3xl " />{" "}
+              <span className="text-4xl font-semibold">
+                {landing?.valuation_rate}
+              </span>
             </div>
             <div className=" flex items-center gap-2 text-[#9e9e9e]">
               <FaBangladeshiTakaSign className="text-1xl line-through" />{" "}
-              <span className="line-through">1,500</span>
-              <p className="text-black">-79%</p>
+              <span className="line-through">{landing?.standard_rate}</span>
+              <p className="text-black">
+                {percentageDifference !== null
+                  ? percentageDifference.toFixed(2) + "%"
+                  : "not available"}
+              </p>
             </div>
           </div>
           <hr className="mt-4" />
-          <div className="flex gap-2 mt-3">
+          {/* <div className="flex gap-2 mt-3">
             <h1 className="text-[#757575]">Color Family</h1>
             <div className="">
               <h1 className="">Not Specified</h1>
@@ -150,24 +213,25 @@ const Product = () => {
                 Not Specified
               </button>
             </div>
-          </div>
+          </div> */}
           <div className="flex gap-20 mt-5">
             <h1 className="text-[#757575]">Size</h1>
             <div className="">
               <h1 className="">Int </h1>
               <div className="flex gap-2 items-center">
-                <button className="py-1 text-[#f36f21] px-1 md:px-4  md:text-[14px] text-xs border mt-1 border-[#f36f21]">
-                  M
-                </button>
-                <button className="py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ">
-                  XXL
-                </button>
-                <button className="py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ">
-                  L
-                </button>
-                <button className="py-1 px-1  md:px-4 text-xs md:text-[14px] border mt-1">
-                  XL
-                </button>
+                {["M", "XXL", "L", "XL"].map((size) => (
+                  <button
+                    key={size}
+                    className={`py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ${
+                      activeSize === size
+                        ? "bg-[#f36f21] text-white"
+                        : "border-[#f36f21] text-[#f36f21]"
+                    }`}
+                    onClick={() => handleClick(size)}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -206,7 +270,7 @@ const Product = () => {
             <div className="w-full">
               {data?.user_id ? (
                 <button
-                  // onClick={() => handleAddCart()}
+                  onClick={() => handleAddCart()}
                   disabled={count > 0 ? false : true}
                   className={`w-full whitespace-nowrap py-2  px-12  font-semibold text-white rounded ${
                     count > 0
@@ -280,15 +344,15 @@ const Product = () => {
               <p className="text-[14px]">Warranty not available</p>
             </div>
           </div>
-          <div className="flex justify-between items-center mt-5">
+          {/* <div className="flex justify-between items-center mt-5">
             <div className="flex gap-2 items-center">
               <p className="text-[14px]">
                 <span>Sold by</span> <br /> <span>S M Accessories</span>
               </p>
             </div>
             <p className="text-[#1a9cb7] font-bold">CHAT</p>
-          </div>
-          <div className="flex mt-4 justify-between">
+          </div> */}
+          {/* <div className="flex mt-4 justify-between">
             <div className="p-4 border">
               <p className="text-[14px]">Warranty not available</p>
               <h1 className="text-xl font-semibold mt-4">70%</h1>
@@ -301,7 +365,7 @@ const Product = () => {
               <p className="text-[14px]">Chat Response Rate</p>
               <h1 className="text-[14px] text-[#ccc] mt-4">Not enough data</h1>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* Ratings & Reviews */}

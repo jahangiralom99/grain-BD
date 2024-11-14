@@ -1,8 +1,13 @@
 import { CiUser } from "react-icons/ci";
+import { MdLogout } from "react-icons/md";
 import { TiArrowShuffle } from "react-icons/ti";
 import { Link } from "react-router-dom";
+import { getStrdCart } from "../../utilities/functions";
+import { FaUserPlus } from "react-icons/fa";
 
 const Navbar1 = () => {
+  const { data } = getStrdCart("grain-login");
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 border-b-2 hidden lg:block">
       <div className="flex justify-end  p-3  ">
@@ -37,11 +42,29 @@ const Navbar1 = () => {
             </div>
           </div>{" "}
           |
-          <Link to="/login">
-            <CiUser className="text-2xl " />
-          </Link>{" "}
-          |
-          <TiArrowShuffle className="text-2xl" />
+          {data?.full_name ? (
+            <div className="flex gap-4 items-center justify-center">
+              <Link
+                data-tip="Profile"
+                className="lg:tooltip lg:tooltip-bottom hover:text-[#f96331]"
+                to="/profile"
+              >
+                <CiUser className="text-2xl" />
+              </Link>{" "}
+              |
+              <button
+                // onClick={handleLogOut}
+                data-tip="logout"
+                className="lg:tooltip lg:tooltip-bottom"
+              >
+                <MdLogout className="text-2xl hover:text-[#f96331]" />
+              </button>
+            </div>
+          ) : (
+            <Link to="/login">
+              <FaUserPlus className="text-2xl hover:text-[#f96331]" />
+            </Link>
+          )}
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ import Login from "../Pages/login/Login";
 import Registration from "../Pages/registration/Registration";
 import PrivateRoutes from "./Privateroute";
 import { loader } from "../utilities/loader";
+import Profile from "../Pages/Profile/Profile";
 
 const Route = createBrowserRouter([
   {
@@ -54,7 +55,7 @@ const Route = createBrowserRouter([
         element: <AllCategory />,
       },
       {
-        path: "/category",
+        path: "/category/:id",
         element: <Category />,
       },
       {
@@ -64,6 +65,10 @@ const Route = createBrowserRouter([
       {
         path: "/registration",
         element: <Registration />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

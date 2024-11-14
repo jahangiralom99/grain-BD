@@ -1,11 +1,16 @@
 // import { Helmet } from "react-helmet";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
-import { getStrdCart, removeToCart } from "../../utilities/functions";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  addToProceed,
+  getStrdCart,
+  removeToCart,
+} from "../../utilities/functions";
 import { base_url } from "../../utilities/dataPanel";
 import { useContext, useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { CartContext } from "../../Root";
+import { toast } from "react-toastify";
 
 const calculateTotalPrice = (cartData, quantities) => {
   return cartData?.reduce(
@@ -18,8 +23,9 @@ const Cart = () => {
   const [cartItmData, setCartItmData] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  // context card 
+  // context card
   const { cartItems, setCartItems } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const [loader, setLoader] = useState(true);
   // const { data } = getStrdCart("login-info");
@@ -41,7 +47,7 @@ const Cart = () => {
     }
   };
 
-  // Deleted Cart Item 
+  // Deleted Cart Item
   const handleCartDel = (key) => {
     removeToCart(key);
     setCartItems(cartItems - 1);
@@ -55,15 +61,47 @@ const Cart = () => {
     setLoader(true);
   };
 
+  const handleProceed = () => {
+    const dataToSubmit = cartItmData?.map((data, idx) => ({
+      image: data.image,
+      item_name: data.item_name,
+      item_code: data.item_code,
+      standard_rate: data.standard_rate,
+      qty: quantities[idx],
+      uom: data.uom,
+      price: quantities[idx] * data.standard_rate,
+    }));
+
+    const dataToProceed = cartItmData?.map((data, idx) => ({
+      item_name: data.item_name,
+      item_code: data.item_code,
+      rate: data.standard_rate,
+      qty: quantities[idx],
+      uom: data.uom,
+      amount: quantities[idx] * data.standard_rate,
+    }));
+
+    console.log("dataToProceed", dataToProceed);
+
+    if (cartItmData.length === 0) {
+      toast.info("Please select Order Item");
+    } else {
+      if (addToProceed(dataToSubmit, "cart")) {
+        if (addToProceed(dataToProceed, "proceed")) {
+          navigate("/checkout");
+        }
+      }
+    }
+  };
+
   return (
     <div className="mt-8 max-w-screen-xl mx-auto px-4 pb-5 bg-[#f9f9f9]">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Cart | Grain Pastry & Bakery </title>
       </Helmet>
-
-      <div className="flex flex-col lg:flex-row gap-3 mt-12">
-        <div className="lg:w-[70%] ">
+      <div className="flex flex-col lg:flex-row items-start  gap-3 mt-12">
+        <div className="lg:w-[70%] w-full">
           <div className=" overflow-x-auto">
             <table className=" w-full min-w-max table-auto text-left ">
               <thead>
@@ -120,7 +158,9 @@ const Cart = () => {
                           src={`${base_url + item?.image}`}
                           alt={item?.item_name}
                         />
-                        <p className="font-semibold ">{item?.item_name}</p>
+                        <p className="font-semibold text-sm md:w-44">
+                          {item?.item_name}
+                        </p>
                       </div>
                     </td>
                     {/* <td className="p-4 border-b border-blue-gray-50">
@@ -140,7 +180,7 @@ const Cart = () => {
                           -
                         </p>
                         <input
-                          className="py-1 px-2 w-8"
+                          className="py-1 px-2 w-9"
                           type="text"
                           value={quantities[idx]}
                         />
@@ -188,7 +228,7 @@ const Cart = () => {
             </div>
           </div>
         </div>
-        <div className="lg:w-[30%] bg-white border-2 rounded p-5">
+        <div className="lg:w-[30%] w-full rounded p-5 border">
           <h1 className="text-2xl font-semibold">CART TOTALS</h1>
           <div className="flex items-center justify-between mt-6">
             <p className="font-semibold text-xl">Subtotal </p>
@@ -213,12 +253,26 @@ const Cart = () => {
               {totalPrice} ৳{" "}
             </p>
           </div>
-          <div className="bg-red-500 hover:bg-red-800 rounded-full text-center p-2 mt-6">
-            <Link to="/checkout">
-              <button className="text-white text-sm font-bold">
-                PROCEED TO CHECKOUT
-              </button>
-            </Link>
+          <div>
+            {cartItmData?.length > 0 ? (
+              <div className="bg-red-500 hover:bg-red-800 rounded-full text-center p-2 mt-6">
+                <button
+                  onClick={() => handleProceed()}
+                  className="text-white text-sm font-bold"
+                >
+                  PROCEED TO CHECKOUT
+                </button>
+              </div>
+            ) : (
+              <div className="bg-gray-300 cursor-not-allowed rounded-full text-center p-2 mt-6">
+                <div
+                  // onClick={() => handleProceed()}
+                  className="text-white text-sm font-bold"
+                >
+                  PROCEED TO CHECKOUT
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

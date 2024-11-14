@@ -4,7 +4,7 @@ import { TiArrowShuffle } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { base_url } from "../../utilities/dataPanel";
 import { useContext, useState } from "react";
-import { addToCart } from "../../utilities/functions";
+import { addToCart, getStrdCart } from "../../utilities/functions";
 import { toast } from "react-toastify";
 import { CartContext } from "../../Root";
 
@@ -12,6 +12,7 @@ const Card = ({ activeGroupId, itemData }) => {
   // const [count, setCount] = useState(1);
   const [counts, setCounts] = useState({});
   const { cartItems, setCartItems } = useContext(CartContext);
+  const { data } = getStrdCart("grain-login");
 
   // console.log(webItmData);
 
@@ -55,13 +56,13 @@ const Card = ({ activeGroupId, itemData }) => {
       <div className="grid gap-5 justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
         {itemData?.data
           ?.filter((item) => item?.item_group === activeGroupId)
-          .map((item) => (
-            <div className="relative group " key={item.id}>
+          .map((item, idx) => (
+            <div className="relative group " key={idx}>
               <Link to={`/product/${item?.name}`}>
                 <img
                   className="w-44 h-32 object-contain mx-auto"
                   src={`${base_url + item?.image}`}
-                  alt=""
+                  alt={item.item_name}
                 />
                 <div className="bg-white hidden group-hover:block rounded absolute top-3 right-3 p-2">
                   <TiArrowShuffle className="text-2xl " />
@@ -122,12 +123,29 @@ const Card = ({ activeGroupId, itemData }) => {
                       +
                     </div>
                   </div>
-                  <button
+                  {/* <button
                     onClick={() => handleAddToCart(item)}
                     className="bg-[#dd9221] gap-1 px-6 py-1 rounded text-white whitespace-nowrap"
                   >
                     ADD TOCART
-                  </button>
+                  </button> */}
+                  <div>
+                    {data?.user_id ? (
+                      <button
+                        onClick={() => handleAddToCart(item)}
+                        className={`bg-[#dd9221] gap-1 px-6 py-1 rounded text-white whitespace-nowrap`}
+                      >
+                        Add To Cart
+                      </button>
+                    ) : (
+                      <Link
+                        to={`/login`}
+                        className={`bg-[#dd9221] gap-1 px-6 py-1 rounded text-white whitespace-nowrap`}
+                      >
+                        Add To Cart
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

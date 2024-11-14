@@ -1,16 +1,24 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { CiSearch } from "react-icons/ci";
+import { CiLogin, CiSearch, CiUser } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
-import { MdOutlineMenu, MdOutlineShoppingBag } from "react-icons/md";
+import { MdLogout, MdOutlineMenu } from "react-icons/md";
 import { TbCurrencyTaka } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../../Root";
-import { getStrdCart } from "../../utilities/functions";
+import { clearStoredCart, getStrdCart } from "../../utilities/functions";
+import { base_url, fetch_url } from "../../utilities/dataPanel";
+import { toast } from "react-toastify";
+import LoaderComponent from "../../components/Shared/LoaderComponent";
+import { FaUserPlus } from "react-icons/fa";
 
 const Navbar2 = () => {
   const [open, setOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const [loader, setLoader] = useState(false);
+  const { cartItems } = useContext(CartContext);
+  const navigate = useNavigate();
+  const { data } = getStrdCart("grain-login");
 
   // Close sidebar if click is outside
   useEffect(() => {
@@ -28,9 +36,6 @@ const Navbar2 = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [open, setOpen]);
-
-  const { cartItems } = useContext(CartContext);
-  const { data } = getStrdCart("grain-login");
 
   const links = (
     <>
@@ -61,6 +66,53 @@ const Navbar2 = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // logout info
+  const handleLogOut = () => {
+    setLoader(true);
+    const postBody = {
+      erp_url: base_url,
+    };
+    // console.log(postBody);
+    fetch(`${fetch_url}/logout`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postBody),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          clearStoredCart("grain-login");
+          clearStoredCart("proceed");
+          //   clearStoredCart("cart");
+          clearStoredCart("item-all-data");
+          //   setCartItems(cartItems + 1);
+          navigate("/login");
+          // window.location.reload();
+          setLoader(false);
+          toast.success("Logout successfully");
+        }
+      })
+      .then((err) => {
+        console.log(err);
+        setLoader(false);
+      })
+      .catch(() => {
+        setLoader(false);
+      });
+  };
+
+  if (loader) {
+    return <LoaderComponent />;
+  }
 
   return (
     <div
@@ -106,7 +158,9 @@ const Navbar2 = () => {
             </div>
           </div>
 
-          <li onClick={() => setOpen(false)}>{links}</li>
+          <li className="gap-4" onClick={() => setOpen(false)}>
+            {links}
+          </li>
         </ul>
       </div>
 
@@ -138,16 +192,28 @@ const Navbar2 = () => {
               </div>
             </div>
           </div>
-          <div className="lg:hidden">
-            <Link to="/cart" className="relative">
-              <MdOutlineShoppingBag className="text-2xl" />
-              <div className="absolute bg-[#823400] rounded-full p-1 h-5 flex items-center justify-center -top-2 left-3">
-                <p className="text-white">{cartItems}</p>
-              </div>
+          <div className="lg:hidden flex items-center justify-center gap-3">
+            <Link
+              data-tip="Profile"
+              className="lg:tooltip lg:tooltip-bottom hover:text-[#f96331]"
+              to="/profile"
+            >
+              <CiUser className="text-2xl" />
             </Link>
+            <button
+              onClick={handleLogOut}
+              data-tip="logout"
+              className="lg:tooltip lg:tooltip-bottom"
+            >
+              <MdLogout className="text-2xl hover:text-[#f96331]" />
+            </button>
           </div>
         </>
-      ) : null}
+      ) : (
+        <Link to="/login">
+          <FaUserPlus className="text-2xl hover:text-[#f96331]" />
+        </Link>
+      )}
     </div>
   );
 };
