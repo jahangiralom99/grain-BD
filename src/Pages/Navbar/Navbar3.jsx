@@ -11,7 +11,10 @@ const Navbar3 = () => {
   return (
     <div className="bg-white fixed bottom-0 w-full z-40 p-3 lg:hidden xl:hidden 2xl:hidden">
       <div className="flex items-center justify-around  cursor-pointer">
-        <Link to="/allCategory" className="text-xs text-[#4f3326] hover:text-[#ad6a4d] font-bold">
+        <Link
+          to="/allCategory"
+          className="text-xs text-[#4f3326] hover:text-[#ad6a4d] font-bold"
+        >
           <CiShop className="text-2xl  cursor-pointer" />
           Shop
         </Link>

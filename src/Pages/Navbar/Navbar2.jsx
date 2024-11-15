@@ -12,8 +12,6 @@ import { toast } from "react-toastify";
 import LoaderComponent from "../../components/Shared/LoaderComponent";
 import { FaUserPlus } from "react-icons/fa";
 
-
-
 const Navbar2 = () => {
   const [open, setOpen] = useState(false);
   const sidebarRef = useRef(null);
@@ -115,8 +113,6 @@ const Navbar2 = () => {
   if (loader) {
     return <LoaderComponent />;
   }
-
-  
 
   return (
     <div
