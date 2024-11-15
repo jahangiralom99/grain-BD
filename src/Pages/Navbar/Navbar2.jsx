@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { CiLogin, CiSearch, CiUser } from "react-icons/ci";
+import { CiSearch, CiUser } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
 import { MdLogout, MdOutlineMenu } from "react-icons/md";
@@ -11,6 +11,8 @@ import { base_url, fetch_url } from "../../utilities/dataPanel";
 import { toast } from "react-toastify";
 import LoaderComponent from "../../components/Shared/LoaderComponent";
 import { FaUserPlus } from "react-icons/fa";
+
+
 
 const Navbar2 = () => {
   const [open, setOpen] = useState(false);
@@ -113,6 +115,8 @@ const Navbar2 = () => {
   if (loader) {
     return <LoaderComponent />;
   }
+
+  
 
   return (
     <div
